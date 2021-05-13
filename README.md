@@ -33,7 +33,7 @@ Then, install [xk6](https://github.com/k6io/xk6) and build your custom k6 binary
 
 2. Build the binary:
   ```shell
-  $ xk6 build --with github.com/mstoykov/xk6-counter
+  $ xk6 build --with github.com/mstoykov/xk6-counter@latest
   ```
 
 # example
