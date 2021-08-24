@@ -5,12 +5,10 @@ This is a [k6](https://go.k6.io/k6) extension using the [xk6](https://github.com
 | :exclamation: This is a proof of concept, isn't supported by the k6 team, and may break in the future. USE AT YOUR OWN RISK! |
 | ---------------------------------------------------------------------------------------------------------------------------- |
 
-This projects implements a singular local counter(name is bad) that goes up. It will return the current value before
-increasing it, and each VU will get a different value. Which means that it can be used to iterate over an array, where:
+This projects implements an anonymized counter (`counter.up()`) and keyed counters (`counter.upNamed('myKey')`). The functions return the current value before
+increasing it, and each VU will get a different value. This means it can be used to iterate over an array, where:
 1. only one element will be used by each VU 
-2. the array doesn't need to be sharded between the VUs it will "dynamically" balance between them even if some elements take longer to process
-
-
+2. the array doesn't need to be sharded between the VUs; it will "dynamically" balance between them even if some elements take longer to process
 
 | This totally doesn't work in distributed manner, so if there are multiple k6 instances you will need a separate service (API endpoint) which to do it. |
 | ---------------------------------------------------------------------------------------------------------------------------- |
@@ -39,8 +37,14 @@ Then, install [xk6](https://github.com/grafana/xk6) and build your custom k6 bin
 # example
 
 ```javascript
-import counter from "k6/x/counter"
+import counter from "k6/x/counter";
+
 export default function() {
-    console.log(counter.up(), __VU, __ITER)
+    // anonymous counter:
+    console.log(counter.up(), __VU, __ITER);
+
+    // named counter:
+    const key = "myKey";
+    console.log(key, counter.upNamed(key), __VU, __ITER);
 }
 ```
